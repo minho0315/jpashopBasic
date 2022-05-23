@@ -1,7 +1,36 @@
-package jpabook;
+package jpabook.jpashop;
 
-public class Main {
+import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Order;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
+
+public class JpaMain {
+
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+
+        try {
+
+            Order order = em.find(Order.class, 1L);
+            Member member = order.getMember();
+
+
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            em.close();
+        }
+        emf.close();
     }
 }
